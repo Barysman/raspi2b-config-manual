@@ -73,7 +73,7 @@
 
 На Raspberry Pi 2 SD карты умирают не от возраста, а от постоянных мелких записей, которые делает система. Карту нужно покупать как минимум с пометкой High Endurance (позицианируются для видеорегистраторов), главное не нарваться на подделку.
 
-### 1. Включить zram (уменьшает запись на карту)
+### 5.1. Включить zram (уменьшает запись на карту)
 ZRAM хранит swap в RAM, сжатый. Это главная защита SD-карты.
 * Установить:
 	```
@@ -88,7 +88,7 @@ ZRAM хранит swap в RAM, сжатый. Это главная защита 
 	/dev/zram0
 	```
 
-### 2. Отключить swap-файл на SD-карте
+### 5.2. Отключить swap-файл на SD-карте
 Если zram включён, то swapfile больше не нужен.
 ```
 sudo dphys-swapfile swapoff	
@@ -96,7 +96,7 @@ sudo dphys-swapfile uninstall
 sudo systemctl disable dphys-swapfile	
 ```
 
-### 3. Перевести /var/log в RAM (log2ram)
+### 5.3. Перевести /var/log в RAM (log2ram)
 Логи постоянно пишутся и убивают карту.
 * Установить:
 	```
@@ -114,7 +114,7 @@ sudo systemctl disable dphys-swapfile
 	log2ram on /var/log type tmpfs
 	```
 
-### 4. Отключить journald persistent logs
+### 5.4. Отключить journald persistent logs
 По умолчанию systemd пишет огромные логи.
 * Отключить:
 	```
@@ -132,7 +132,7 @@ sudo systemctl disable dphys-swapfile
 * Перезагрузить
 * Теперь systemd пишет логи только в RAM.
 
-### 5. Отключить ненужные сервисы, которые пишут на диск
+### 5.5. Отключить ненужные сервисы, которые пишут на диск
 Тут смотреть, если чтото надо, то не отключать
 ```
 sudo systemctl disable --now triggerhappy
@@ -141,7 +141,7 @@ sudo systemctl disable --now avahi-daemon
 sudo systemctl disable --now cups
 ```
 
-### 6. Уменьшить частоту записи времени (fsync)
+### 5.6. Уменьшить частоту записи времени (fsync)
 * Включить оптимизацию ext4:
 	```
 	sudo tune2fs -o journal_data_writeback /dev/mmcblk0p2
@@ -157,7 +157,7 @@ sudo systemctl disable --now cups
 * Сохранить (ctrl+o, ctrl+x)
 * Это уменьшает количество записей при чтении файлов.
 
-### 7. Включить кэширование APT (меньше перезаписей)
+### 5.7. Включить кэширование APT (меньше перезаписей)
 * Открыть файл
 	```
 	sudo nano /etc/apt/apt.conf.d/02nocache
@@ -169,7 +169,7 @@ sudo systemctl disable --now cups
 	```
 * Сохранить (ctrl+o, ctrl+x)
 
-### 8. Не хранить историю bash на диске
+### 5.8. Не хранить историю bash на диске
 Сомнительная вещь, но имеет место быть.
 * Выполнить команду
 	```
